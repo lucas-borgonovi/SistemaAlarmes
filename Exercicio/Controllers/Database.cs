@@ -65,7 +65,7 @@ namespace Exercicio.Controllers
             {
                 using (var con = DbConnection().CreateCommand())
                 {
-                    con.CommandText = "CREATE TABLE IF NOT EXISTS Alarmes(id INTEGER PRIMARY KEY AUTOINCREMENT, Descricao Varchar(255), Classificacao Varchar(255), EquipId int, Data Varchar(255),Status BIT, Foreign key (EquipID) references Equipamentos(id))";
+                    con.CommandText = "CREATE TABLE IF NOT EXISTS Alarmes(id INTEGER PRIMARY KEY AUTOINCREMENT, Descricao Varchar(255), Classificacao Varchar(255), EquipId int, Data Varchar(255),Status Boolean, Foreign key (EquipID) references Equipamentos(id))";
                     var result = await con.ExecuteNonQueryAsync();
                     return result;
                 }
@@ -149,10 +149,34 @@ namespace Exercicio.Controllers
             {
                 using (var con = DbConnection().CreateCommand())
                 {
-                    con.CommandText = "select al.Descricao,al.Classificacao,al.Data,al.Status,eq.Nome from Alarmes as al, Equipamentos as eq where al.id = eq.id";
+                    con.CommandText = "select al.id,al.Descricao,al.Classificacao,al.Data,al.Status,eq.Nome from Alarmes as al, Equipamentos as eq where al.id = eq.id";
                     da = new SQLiteDataAdapter(con.CommandText, DbConnection());
                     da.Fill(dt);
                     return dt;
+
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async static Task<int> UpdateAlarms(int id,Alarmes alarm)
+        {
+
+            SQLiteDataAdapter da = null;
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (var con = DbConnection().CreateCommand())
+                {
+                    con.CommandText = "UPDATE Alarmes SET Status = @Status WHERE id = @ID;";
+                    con.Parameters.AddWithValue("@Status", alarm.Status);
+                    con.Parameters.AddWithValue("@ID", id);
+
+                    var result = await con.ExecuteNonQueryAsync();
+                    return result;
 
                 }
             }

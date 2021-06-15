@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import './Alarmes.css';
-import apiAlarm from '../services/cadastroAlarme';
-import apiEquipName from '../services/pegueNomeEquip';
+import apiAlarm from '../../services/cadastroAlarme';
+import apiEquipName from '../../services/pegueNomeEquip';
 export default function Alarmes()
 {
   const[alarm,setAlarm] = useState({

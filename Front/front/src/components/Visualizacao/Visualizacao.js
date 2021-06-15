@@ -1,5 +1,6 @@
 import React, {useEffect,useState} from 'react';
 import apiAllAlarmes from '../../services/tabelaAlarmes';
+import apiUpdateAlarmes from '../../services/updateAlarme';
 import handleBool from '../../utils/handleBool';
 
 
@@ -9,16 +10,34 @@ export default function Visualizacao(){
     const[tabela,setTabela] = useState([]);
     
 
-    useEffect( async ()=>{
+    useEffect( ()=>{
             
-        await apiAllAlarmes()
-            .then((res)=>{
-                console.log(res);
-                insertDataToTable(res);
-        })
+        async function fetchData(){
+
+            await apiAllAlarmes()
+                .then((res)=>{
+                    insertDataToTable(res);
+                })
+        }
+
+        fetchData();
  
 
     },[])
+
+    async function setStatusAlarm(alarme){
+        
+        alarme.Status === true ? alarme.Status = false : alarme.Status = true;
+
+        await apiUpdateAlarmes(alarme.id,alarme)
+        
+        await apiAllAlarmes()
+            .then((res)=>{
+                insertDataToTable(res);
+            })
+            
+        
+    }
 
     async function insertDataToTable(res){
 
@@ -26,7 +45,7 @@ export default function Visualizacao(){
 
         res.map((item,index)=>{
 
-            const status = handleBool(item.Status)
+            let status = handleBool(item.Status)
             
             tabelaArr.push(
                     <tr key={index}>
@@ -36,7 +55,7 @@ export default function Visualizacao(){
                             <td>{item.Data}</td>
                             <td>{status}</td>
                             <td>
-                                <button>Desativar</button>
+                                <button onClick={()=>setStatusAlarm(item)}>Desativar</button>
                             </td>
                     </tr>
 
@@ -45,8 +64,6 @@ export default function Visualizacao(){
 
         setTabela(tabelaArr);
     }
-
-    console.log(tabela)
     
     return (
         <table>

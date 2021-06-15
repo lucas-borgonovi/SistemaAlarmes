@@ -46,8 +46,11 @@ namespace Exercicio.Controllers
 
         // PUT api/<AlarmesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Alarmes alarm)
         {
+            await Database.UpdateAlarms(id,alarm);
+
+            return NoContent();
         }
 
         // DELETE api/<AlarmesController>/5

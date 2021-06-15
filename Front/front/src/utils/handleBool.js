@@ -2,7 +2,7 @@ export default function handleBool(status){
 
     let resultado = "";
 
-    if(status == true){
+    if(status === true){
         resultado = "On";
     }else{
         resultado = "Off";

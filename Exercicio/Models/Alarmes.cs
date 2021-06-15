@@ -14,7 +14,7 @@ namespace Exercicio.Models
 
         public int EquipRelacionado { get; set; }
 
-        public int Status{ get; set; }
+        public bool Status{ get; set; }
 
         public string Data { get; set; }
     }

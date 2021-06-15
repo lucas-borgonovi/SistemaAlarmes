@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-export default async function tabelaAlarmes()
+export default async function updateAlarm(id,alarme)
 {
+
     return axios
-        .get("https://localhost:44320/api/Alarmes")
+        .put(`https://localhost:44320/api/Alarmes/${id}`,alarme)
         .then(response=>{
             return response.data
         })
