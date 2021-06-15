@@ -1,0 +1,19 @@
+.inputContainer{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ContainerEquip{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.BotaoEquip{
+    margin: 15px 0px;
+    display: flex;
+    justify-content: center;
+}
