@@ -1,5 +1,5 @@
 export default function handleBool(status){
-
+    
     let resultado = "";
 
     if(status === true){

@@ -15,7 +15,7 @@ namespace Exercicio.Controllers
     {
 
         
-        // GET: api/<AlarmesController>
+        // GET: api/<EquipamentosController>
         [HttpGet]
         public string GetEquipNames()
         {
@@ -26,22 +26,22 @@ namespace Exercicio.Controllers
             return jsonTable;
         }
 
-        // GET api/<ValuesController>/5
+        // GET api/<EquipamentosController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<ValuesController>
+        // POST api/<EquipamentosController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Equipamentos equip)
         {
             try
             {
                 await Database.CreateEquipTable();
-                var teste = await Database.InsertEquipData(equip);
-                return Ok(teste);
+                await Database.InsertEquipData(equip);
+                return Ok();
             }
             catch
             {
@@ -51,13 +51,13 @@ namespace Exercicio.Controllers
 
         }
 
-        // PUT api/<ValuesController>/5
+        // PUT api/<EquipamentosController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<ValuesController>/5
+        // DELETE api/<EquipamentosController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

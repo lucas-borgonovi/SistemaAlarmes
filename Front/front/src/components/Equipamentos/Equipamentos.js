@@ -12,9 +12,7 @@ export default function Equipamentos()
     function handleInputChange(event){
 
       const {name,value} = event.target;
-      
       setEquip({...equip,[name]:value});
-      console.log(equip.nome);
 
   }
     function handleSelectedValues(event){
@@ -31,7 +29,6 @@ export default function Equipamentos()
 
     const numeroSerie = parseInt(equip.numeroSerie);
 
-
     let data = new Date();
 
     data = data.getDate() + '/' + (data.getMonth()+1) + '/'+ data.getFullYear();
@@ -42,8 +39,6 @@ export default function Equipamentos()
       tipo,
       data
     }
-
-    console.log(dados)
 
     await apiEquip(dados);
 
@@ -60,7 +55,7 @@ export default function Equipamentos()
               <label>Nome do equipamento: </label>
               <input placeholder="Nome do equipamento" name="nome" onChange={handleInputChange}/>
               <label>Número de série: </label>
-              <input placeholder="Número de série" name="numeroSerie" onChange={handleSelectedValues}/>
+              <input placeholder="Número de série" name="NumeroSerie" type="number" onChange={handleInputChange}/>
               <label>Tipo: </label>
               <select  name="tipo" onChange={handleInputChange}>
                 <option value="0">Selecione o tipo</option>

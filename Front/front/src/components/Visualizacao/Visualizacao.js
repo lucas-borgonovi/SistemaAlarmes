@@ -2,13 +2,56 @@ import React, {useEffect,useState} from 'react';
 import apiAllAlarmes from '../../services/tabelaAlarmes';
 import apiUpdateAlarmes from '../../services/updateAlarme';
 import handleBool from '../../utils/handleBool';
+import { DataGrid } from '@material-ui/data-grid';
+import Button from '@material-ui/core/Button';
+import formatJson from '../../utils/formatJson';
+import handleStatusTable from '../../utils/handleStatusTable';
+
 
 
 export default function Visualizacao(){
 
+    const[rows,setRows] = useState([]);
 
-    const[tabela,setTabela] = useState([]);
-    
+    const columns = [
+        {field: 'col1', headerName: 'Descrição Alarme', width: 300},
+        {field: 'col2', headerName: 'Classificação Alarme', width: 300},
+        {field: 'col3', headerName: 'Data de Cadastro', width: 300},
+        {field: 'col4', headerName: 'Equipamento', width: 300},
+        {field: 'col5', headerName: 'Status', width: 300},
+        {
+            field: 'col6', 
+            headerName: 'Desativar/Ativar', 
+            width: 300,
+            disableClickEventBubbling: true,
+            renderCell: (params)=>{
+           
+                const onClick = async () => {
+
+                    let selectedRow = params.row;
+
+                    let statusTable = handleStatusTable(selectedRow.col5)
+
+                    statusTable === true ? statusTable = false : statusTable = true;
+
+                    const status = formatJson(statusTable);
+
+                    await apiUpdateAlarmes(selectedRow.id,status);
+                    
+                    await apiAllAlarmes()
+                        .then((res)=>{
+                            formatRows(res);
+                        })
+
+                   
+                  };
+
+                return <Button onClick={onClick}>Ação</Button>
+            }
+            
+        }
+    ]
+
 
     useEffect( ()=>{
             
@@ -16,7 +59,7 @@ export default function Visualizacao(){
 
             await apiAllAlarmes()
                 .then((res)=>{
-                    insertDataToTable(res);
+                    formatRows(res)
                 })
         }
 
@@ -25,61 +68,37 @@ export default function Visualizacao(){
 
     },[])
 
-    async function setStatusAlarm(alarme){
-        
-        alarme.Status === true ? alarme.Status = false : alarme.Status = true;
+    function formatRows(alarms){
+        const arrayRows = [];
+        alarms.map((item)=>{
 
-        await apiUpdateAlarmes(alarme.id,alarme)
-        
-        await apiAllAlarmes()
-            .then((res)=>{
-                insertDataToTable(res);
-            })
-            
-        
-    }
+            item.Status = handleBool(item.Status);
 
-    async function insertDataToTable(res){
+            let row = {
+                id: item.id,
+                col1:item.Descricao,
+                col2:item.Classificacao,
+                col3:item.Data,
+                col4:item.Nome,
+                col5:item.Status,
+                col6:"teste"
+            }
 
-        const tabelaArr = [];
-
-        res.map((item,index)=>{
-
-            let status = handleBool(item.Status)
-            
-            tabelaArr.push(
-                    <tr key={index}>
-                            <td>{item.Descricao}</td>
-                            <td>{item.Classificacao}</td>
-                            <td>{item.Nome}</td>
-                            <td>{item.Data}</td>
-                            <td>{status}</td>
-                            <td>
-                                <button onClick={()=>setStatusAlarm(item)}>Desativar</button>
-                            </td>
-                    </tr>
-
-            )  
+            arrayRows.push(row);
         })
 
-        setTabela(tabelaArr);
+        setRows(arrayRows);
+
     }
-    
-    return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Descrição Alarme</th>
-                    <th>Descrição Equipamento</th>
-                    <th>Status do Alarme</th>
-                    <th>Data Cadastro</th>
-                    <th>Status</th>
-                    <th>Desativar Alarme</th>
-                </tr>
-            </thead>
-            <tbody>
-                    {tabela}
-            </tbody>
-        </table>
+
+    return(
+        <div style={{ height: 300, width: '100%' }}>
+
+            <DataGrid 
+            rows={rows} 
+            columns={columns}    
+            />
+
+        </div>
     )
 }

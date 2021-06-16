@@ -8,7 +8,7 @@ export default function Alarmes()
     descricao:"",
     classificacao:"",
     equipRelacionado:0,
-    status:1
+    status:true
   })
 
   const[nomesEquip, setNomesEquip] = useState([])
