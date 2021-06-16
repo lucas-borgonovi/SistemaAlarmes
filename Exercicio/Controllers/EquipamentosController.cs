@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Exercicio.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,23 +17,27 @@ namespace Exercicio.Controllers
     public class EquipamentosController : ControllerBase
     {
 
+        private readonly ILogger _logger;
+
         
         // GET: api/<EquipamentosController>
         [HttpGet]
-        public string GetEquipNames()
+        public string Get()
         {
-            var result = Database.GetAllEquipsNames();
+            try
+            {
+                EquipDatabase equipDb = new EquipDatabase();
 
-            string jsonTable = JsonConvert.SerializeObject(result);
+                var result = equipDb.GetAllEquipsNames();
 
-            return jsonTable;
-        }
+                string jsonTable = JsonConvert.SerializeObject(result);
 
-        // GET api/<EquipamentosController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+                return jsonTable;
+            }catch(Exception ex)
+            {
+                _logger.LogError("Erro ao executar o método Get de Equipamentos Controller", ex);
+                return ex.Message;
+            }
         }
 
         // POST api/<EquipamentosController>
@@ -39,28 +46,18 @@ namespace Exercicio.Controllers
         {
             try
             {
-                await Database.CreateEquipTable();
-                await Database.InsertEquipData(equip);
+                EquipDatabase equipDb = new EquipDatabase();
+                await equipDb.CreateEquipTable();
+                await equipDb.InsertEquipData(equip);
                 return Ok();
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                _logger.LogError("Erro ao executar o método Post de Equipamentos Controller", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
 
-        }
-
-        // PUT api/<EquipamentosController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<EquipamentosController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

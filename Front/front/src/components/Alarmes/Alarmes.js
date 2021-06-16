@@ -40,7 +40,6 @@ export default function Alarmes()
 
     value = name === "equipRelacionado" ? parseInt(value) : value;
   
-    console.log(value);
     setAlarm({...alarm,[name]:value});
   } 
 
@@ -61,8 +60,6 @@ async function handleSubmit(event){
     data,
     status
   }
-
-  console.log(dados)
 
   await apiAlarm(dados);
 

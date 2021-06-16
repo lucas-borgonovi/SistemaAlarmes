@@ -12,13 +12,13 @@ export default function Equipamentos()
     function handleInputChange(event){
 
       const {name,value} = event.target;
+
       setEquip({...equip,[name]:value});
 
   }
     function handleSelectedValues(event){
       const tipo = event.target.value;
-
-      setEquip(tipo);
+      setEquip({...equip,tipo});
     } 
 
   async function handleSubmit(event){
@@ -55,9 +55,9 @@ export default function Equipamentos()
               <label>Nome do equipamento: </label>
               <input placeholder="Nome do equipamento" name="nome" onChange={handleInputChange}/>
               <label>Número de série: </label>
-              <input placeholder="Número de série" name="NumeroSerie" type="number" onChange={handleInputChange}/>
+              <input placeholder="Número de série" name="numeroSerie" type="number" onChange={handleInputChange}/>
               <label>Tipo: </label>
-              <select  name="tipo" onChange={handleInputChange}>
+              <select  name="tipo" onChange={handleSelectedValues}>
                 <option value="0">Selecione o tipo</option>
                 <option value="Tensão">Tensão</option>
                 <option value="Corrente">Corrente</option>
