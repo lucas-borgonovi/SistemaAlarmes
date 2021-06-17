@@ -11,15 +11,20 @@ export default function Alarmes()
     status:true
   })
 
-  const[nomesEquip, setNomesEquip] = useState([])
+  const[nomesEquip, setNomesEquip] = useState([""])
 
   useEffect(()=>{
 
       async function fetchData(){
 
           const listaNomes = await apiEquipName();
-    
-          setNomesEquip(listaNomes);
+
+          if(listaNomes){
+
+            setNomesEquip(listaNomes);
+            
+          }
+
       }
 
       fetchData()
