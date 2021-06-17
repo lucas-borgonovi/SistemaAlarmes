@@ -17,8 +17,15 @@ namespace Exercicio.Controllers
     public class EquipamentosController : ControllerBase
     {
 
-        private readonly ILogger _logger;
+        private readonly ILogger<EquipamentosController> _logger;
+        private  EquipDatabase _equipDb;
+        
 
+        public EquipamentosController(ILogger<EquipamentosController> logger, EquipDatabase equipDatabase)
+        {
+            _logger = logger;
+            _equipDb = equipDatabase;
+        }
         
         // GET: api/<EquipamentosController>
         [HttpGet]
@@ -26,9 +33,9 @@ namespace Exercicio.Controllers
         {
             try
             {
-                EquipDatabase equipDb = new EquipDatabase();
 
-                var result = equipDb.GetAllEquipsNames();
+
+                var result = _equipDb.GetAllEquipsNames();
 
                 string jsonTable = JsonConvert.SerializeObject(result);
 
@@ -46,9 +53,10 @@ namespace Exercicio.Controllers
         {
             try
             {
-                EquipDatabase equipDb = new EquipDatabase();
-                await equipDb.CreateEquipTable();
-                await equipDb.InsertEquipData(equip);
+
+                await _equipDb.CreateEquipTable();
+                await _equipDb.InsertEquipData(equip);
+                _logger.LogInformation("Teste controller");
                 return Ok();
             }
             catch(Exception ex)

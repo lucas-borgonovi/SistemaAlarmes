@@ -59,7 +59,10 @@ export default function Visualizacao(){
 
             await apiAllAlarmes()
                 .then((res)=>{
-                    formatRows(res)
+                    if(res){
+
+                        formatRows(res)
+                    }
                 })
         }
 
@@ -91,14 +94,18 @@ export default function Visualizacao(){
 
     }
 
-    return(
-        <div style={{ height: 300, width: '100%' }}>
+        return(
+            <div style={{ height: 300, width: '100%' }}>
+    
+                <DataGrid 
+                rows={rows} 
+                columns={columns}    
+                />
+    
+            </div>
+        )
+    
 
-            <DataGrid 
-            rows={rows} 
-            columns={columns}    
-            />
+    
 
-        </div>
-    )
 }

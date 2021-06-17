@@ -1,3 +1,4 @@
+using Exercicio.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,6 +28,8 @@ namespace Exercicio
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<EquipDatabase>();
+            services.AddSingleton<AlarmDatabase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

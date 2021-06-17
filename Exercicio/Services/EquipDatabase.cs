@@ -13,12 +13,13 @@ namespace Exercicio.Services
     {
         private static SQLiteConnection _sqliteConnection;
 
-        private readonly ILogger _logger;
+        private readonly ILogger<EquipDatabase> _logger;
 
-        public EquipDatabase()
+        public EquipDatabase(ILogger<EquipDatabase> logger)
         {
-
+            _logger = logger;
         }
+        
 
         private static SQLiteConnection DbConnection()
         {

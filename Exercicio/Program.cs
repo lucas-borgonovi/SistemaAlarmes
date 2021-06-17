@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +17,13 @@ namespace Exercicio
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            Database Db = new Database();
-            var path = Directory.GetCurrentDirectory() + @"\Database\db.db";
 
-            if (Directory.Exists(path) == false)
+            var path = Directory.GetCurrentDirectory() + @"\Database\db.db";
+            
+
+            if (!File.Exists(path))
             {
-                Db.CreateDatabase();
+                SQLiteConnection.CreateFile(path);
             }
 
             host.Run();
@@ -29,6 +31,13 @@ namespace Exercicio
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging((context, logging) =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                    logging.AddDebug();
+                    logging.AddConsole();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

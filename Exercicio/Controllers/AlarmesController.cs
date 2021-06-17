@@ -19,7 +19,14 @@ namespace Exercicio.Controllers
     public class AlarmesController : ControllerBase
     {
 
-        private readonly ILogger _logger;
+        private readonly ILogger<AlarmesController> _logger;
+        private readonly AlarmDatabase _alarmDb;
+
+        public AlarmesController(ILogger<AlarmesController> logger, AlarmDatabase alarmDb)
+        {
+            _logger = logger;
+            _alarmDb = alarmDb;
+        }
         
 
         // GET: api/<ValuesController>
@@ -29,9 +36,8 @@ namespace Exercicio.Controllers
 
             try
             {
-                AlarmDatabase alarmDb = new AlarmDatabase();
 
-                var result = alarmDb.GetAllAlarms();
+                var result = _alarmDb.GetAllAlarms();
 
                 string jsonTable = JsonConvert.SerializeObject(result);
 
@@ -44,23 +50,15 @@ namespace Exercicio.Controllers
             }
         }
 
-        // GET api/<AlarmesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<AlarmesController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Alarmes alarm)
         {
             try
             {
-                AlarmDatabase alarmDb = new AlarmDatabase();
 
-                await alarmDb.CreateAlarmeTable();
-                await alarmDb.InsertAlarmData(alarm);
+                await _alarmDb.CreateAlarmeTable();
+                await _alarmDb.InsertAlarmData(alarm);
                 return Ok();
 
             }catch(Exception ex)
@@ -76,8 +74,7 @@ namespace Exercicio.Controllers
         {
             try
             {
-                AlarmDatabase alarmDb = new AlarmDatabase();
-                await alarmDb.UpdateAlarms(id,alarm);
+                await _alarmDb.UpdateAlarms(id,alarm);
 
                 return Ok();
 
